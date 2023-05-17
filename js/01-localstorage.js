@@ -1,9 +1,60 @@
+// Есть два метода работы с хранилищеми 4 основные метода работы с данными:
+
+// 1.
+// JSON.stringify(obj); // берет объект и приводит его к строке. На практике приводим либо массив объектов либо объект.
+// К примеру:
+const user = {
+    name: 'Mango',
+    age: 21
+}
+// Нам необходимо преобразовать этот объект в json формат, т.е. в строку плюс ключ(свойство) и его значение взяты в "" : 
+console.log(JSON.stringify(user));
+
+// 2.
+// JSON.parse(string); // этот метод берет json файл и парсит его в обычный js формат, т.е. метод обратный JSON.stringify(obj);
+const savedUserData = '{"name":"Mango","age":21}';
+console.log(JSON.parse(savedUserData));
+
+// Методы:
+// localStorage.getItem() - получает значение, работает по одному параметру - ключ
+// localStorage.setItem() - добавляет и сохраняет значение в хранилище, работает по двум параметрам - ключ и значение
+// localStorage.removeItem() - удаляет конкретный ключ, работает по одному параметру - ключ
+// localStorage.clear() - удаляет все настройки(как пользовательские так и доп.типа googleAnalitics) в localStorage:
+
+// При работе с даными в хранилище, мы всегда обращаемся к данным по ключу(не по значению) и за одно обращение получаем
+// только один ключ(и одно значени).
+// При работе с любым типом данных, кроме строки, мы всегда должны приводить этот тип к строке:
+localStorage.setItem('TEST_KEY', JSON.stringify([1, 2, 3, 4]));
+console.log(JSON.parse(localStorage.setItem('TEST_KEY')));
+localStorage.removeItem('TEST_KEY');
+
+
+// Теперь о концепции localStorage или Web Storage API - это небольшое место на диске пользователя (или грубо говоря в
+// браузере), где мы можем сохрнаить какую-то информацию (но не приватная информация, т.к. она общедоступная), обычно
+// там хранятся общие настройки и т.д.
+// Посмотреть из консоли можем так: 
 console.log(localStorage);
+// В браузере, содержимое хранилища можно посмотреть в тулзах разработчика в консоли на вкладке Aplication раздел Storage
 
-localStorage.setItem('my-data', JSON.stringify({ name: 'Mango', age: 2 }));
+// Метод localStorage.setItem(key: string, value: string, void) В локалсторедж сохранить массив или объект в чистом виде
+// нельзя, т.к.он подразумевает хранение только строк.Т.е.если мы хотим записать что либо в хранилище, мы прежде всего должны
+// привести наши данные к json строке:
 
+// localStorage.setItem('my-data', JSON.stringify({ name: 'Mango', age: 2 }));
+
+// Прочитать из localStorage тоже просто, достаточно написать localStorage.getItem() и в() указать ключ, по которому хотим
+// получить данные:
+console.log(localStorage.getItem('my-data')); // в таком виде мы получим значение по ключу, но пока только в виде строки,
+// т.к. этот метод не умеет парсить. Поэтому полученный результат необходимо ещё и распарсить:
+ 
 const savedData = localStorage.getItem('my-data');
 console.log('savedData', savedData);
 
 const parsedData = JSON.parse(savedData);
 console.log('parsedData', parsedData);
+
+// В localStorage не хранят методы и функции, в нем хранят только данные, объекты и массивы!!!
+
+// Есть ещё sessionStorage, его API(т.е.методы управлени типа stringify, parse, getItem, setItem) полностью аналогичный
+// localStorage, отличие в том, что localStorage хранит данные между перезагрузками страницы(на них можно рассчитывать),
+// а в sessionStorage хранятся данные только на период сессии на вкладке(странице).
